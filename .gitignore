@@ -1,0 +1,11 @@
+# Ignora a pasta node_modules (com dependências do Node.js)
+node_modules/
+# Ignora arquivos de log
+*.log
+# Ignora variáveis de ambiente
+.env
+# Ignora diretórios temporários
+tmp/
+dist/
+#Ignora arquivo packge-lock.json
+package-lock.json
