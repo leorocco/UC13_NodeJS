@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/leorocco/UC13_NodeJS#readme",
   "dependencies": {
+    "bootstrap": "^5.3.6",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.2",
     "mysql2": "^3.14.1"

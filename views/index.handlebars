@@ -1,0 +1,13 @@
+<h1>Hello World, com Handlebars!</h1>
+
+{{#if produtos.length}}
+  {{#each produtos}}
+    <div>
+        <h2>{{this.nome}}</h2>
+        <p>Preço: R$ {{this.preco}}</p>
+        <p>Descrição: {{this.descricao}}</p>
+    </div>  
+  {{/each}}
+{{else}}
+  <p>Sem produtos disponíveis no momento.</p>
+{{/if}}
