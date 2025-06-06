@@ -27,8 +27,17 @@ conexao.connect((erro) => {
 });
 
 app.get('/', (req, res) => {;
-  res.render('teste');
+  let sql = 'SELECT * FROM produtos';
+  conexao.query(sql, function (erro, produtos_qs) {
+    if (erro) {
+      console.error('😫 Erro ao consultar produtos:', erro);
+      res.status(500).send('Erro ao consultar produtos');
+      return;
+    }
+    res.render('index', { produtos: produtos_qs });
+  });
 }
 );
+
 
 app.listen(8080);
