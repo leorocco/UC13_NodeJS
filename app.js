@@ -40,4 +40,16 @@ app.get('/', (req, res) => {;
 );
 
 
+app.get('/clientes', (req, res) => {;
+  let sql = 'SELECT * FROM clientes';
+  conexao.query(sql, function (erro, clientes_qs) {
+    if (erro) {
+      console.error('😫 Erro ao consultar clientes:', erro);
+      res.status(500).send('Erro ao consultar clientes');
+      return;
+    }
+    res.render('clientes', { clientes: clientes_qs });
+  });
+});
+
 app.listen(8080);

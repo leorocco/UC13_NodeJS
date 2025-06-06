@@ -1,0 +1,30 @@
+<h1 class="text-center my-4">Clientes</h1>
+
+<div class="container">
+  {{#if clientes.length}}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover align-middle">
+        <thead class="table-primary text-center">
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Endereço</th>
+          </tr>
+        </thead>  
+        <tbody>
+          {{#each clientes}}
+            <tr>
+              <td>{{this.nome}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.endereco}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
+    <div class="alert alert-warning text-center" role="alert">
+      Sem clientes disponíveis no momento.
+    </div>
+  {{/if}}
+</div>

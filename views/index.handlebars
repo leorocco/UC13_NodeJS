@@ -1,13 +1,32 @@
-<h1>Hello World, com Handlebars!</h1>
+<style>
+  .card:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  }
+</style>
 
-{{#if produtos.length}}
-  {{#each produtos}}
-    <div>
-        <h2>{{this.nome}}</h2>
-        <p>Preço: R$ {{this.preco}}</p>
-        <p>Descrição: {{this.descricao}}</p>
-    </div>  
-  {{/each}}
-{{else}}
-  <p>Sem produtos disponíveis no momento.</p>
-{{/if}}
+<h1 class="text-center my-4">Hello World, com Handlebars!</h1>
+
+<div class="container">
+  {{#if produtos.length}}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {{#each produtos}}
+        <div class="col">
+          <div class="card h-100 bg-light border-primary">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{this.nome}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">R$ {{this.preco}}</h6>
+              <p class="card-text">{{this.descricao}}</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-warning text-center" role="alert">
+      Sem produtos disponíveis no momento.
+    </div>
+  {{/if}}
+</div>
