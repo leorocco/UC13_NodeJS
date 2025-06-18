@@ -1,0 +1,36 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Produtos da Categoria: {{categoria_nome}}</h1>
+
+  {{#if produtos.length}}
+    <div class="row">
+      {{#each produtos}}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{this.nome}}</h5>
+              <p class="card-text text-muted">{{this.descricao}}</p>
+              <p class="card-text">
+                <strong>Preço:</strong> R$ {{this.preco}}<br>
+                <strong>Estoque:</strong> {{this.estoque}} unidades
+              </p>
+              <a href="/produtos/{{this.id}}" class="btn btn-sm btn-primary">
+                Ver detalhes
+              </a>
+            </div>
+            <div class="card-footer text-muted text-end">
+              Produto ID: {{this.id}}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-warning text-center" role="alert">
+      Nenhum produto encontrado para esta categoria.
+    </div>
+  {{/if}}
+
+  <div class="text-center mt-4">
+    <a href="/" class="btn btn-secondary">← Voltar</a>
+  </div>
+</div>
