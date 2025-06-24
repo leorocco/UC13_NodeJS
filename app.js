@@ -43,7 +43,7 @@ app.get('/', (req, res) => {;
 }
 );
 
-app.get('/produtos/:id', (req, res) => {
+app.get('/produtos/:id/detalhes', (req, res) => {
   const id = req.params.id;
   const sql = `
     SELECT produtos.*, 
