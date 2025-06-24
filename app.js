@@ -121,6 +121,21 @@ app.post('/produtos/add', (req, res) => {
   });
 });
 
+app.post('/produtos/:id/remover', (req, res) => {
+  const id = req.params.id;
+  const sql = 'DELETE FROM produtos WHERE id = ?';
+
+  conexao.query(sql, [id], (erro, resultado) => {
+    if (erro) {
+      console.error('❌ Erro ao apagar produto:', erro);
+      return res.status(500).send('Erro ao apagar produto.');
+    }
+    res.redirect('/');
+  });
+});       
+  
+
+
 app.get('/categorias', (req, res) => {
   let sql = 'SELECT * FROM categorias';
   conexao.query(sql, function (erro, categorias_qs) {
