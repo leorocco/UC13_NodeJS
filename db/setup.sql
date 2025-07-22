@@ -1,16 +1,32 @@
+-- DROP DATABASE IF EXISTS ecommerce_pc;
+
 -- Criação do banco de dados
 CREATE DATABASE IF NOT EXISTS ecommerce_pc
     DEFAULT CHARACTER SET = 'utf8mb4';
 
 USE ecommerce_pc;
 
+-- Tabela de usuários
+CREATE TABLE usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  tipo VARCHAR(20) DEFAULT 'comum', -- Ex: 'admin', 'comum', 'vendedor'
+  criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO usuarios (nome, email, senha, tipo) VALUES
+('Administrador', 'admin@email.com', '$2b$10$HASH_AQUI', 'admin');
+
 -- Tabela de clientes
 CREATE TABLE clientes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  senha VARCHAR(100) NOT NULL,
   endereco TEXT,
+  usuario_id INT NOT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
   criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -54,12 +70,20 @@ CREATE TABLE itens_pedido (
 );
 
 -- Inserções iniciais
-INSERT INTO clientes (nome, email, senha, endereco) VALUES
-('João Silva', 'joao@email.com', '123456', 'Rua A, 123'),
-('Maria Oliveira', 'maria@email.com', 'abcdef', 'Av. Central, 456'),
-('Carlos Souza', 'carlos@email.com', 'senha123', 'Rua das Flores, 78'),
-('Ana Costa', 'ana@email.com', 'senha456', 'Rua da Paz, 10'),
-('Pedro Lima', 'pedro@email.com', 'minhasenha', 'Rua Verde, 98');
+INSERT INTO usuarios (nome, email, senha, tipo) VALUES
+('João Silva', 'joao@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'comum'),
+('Maria Oliveira', 'maria@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'comum'),
+('Carlos Souza', 'carlos@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'comum'),
+('Ana Costa', 'ana@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'comum'),
+('Pedro Lima', 'pedro@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'comum');
+
+INSERT INTO clientes (nome, endereco, usuario_id) VALUES
+('João Silva', 'Rua A, 123', 2),
+('Maria Oliveira', 'Av. Central, 456', 3),
+('Carlos Souza', 'Rua das Flores, 78', 4),
+('Ana Costa', 'Rua da Paz, 10', 5),
+('Pedro Lima', 'Rua Verde, 98', 6);
+
 
 INSERT INTO categorias (nome, descricao) VALUES
 ('Processadores', 'CPUs para desktops'),

@@ -28,10 +28,12 @@
   },
   "homepage": "https://github.com/leorocco/UC13_NodeJS#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.6",
     "bootstrap-icons": "^1.13.1",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.2",
+    "express-session": "^1.18.2",
     "mysql2": "^3.14.1"
   }
 }
