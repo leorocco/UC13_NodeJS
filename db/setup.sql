@@ -1,4 +1,4 @@
--- DROP DATABASE IF EXISTS ecommerce_pc;
+ DROP DATABASE IF EXISTS ecommerce_pc;
 
 -- Criação do banco de dados
 CREATE DATABASE IF NOT EXISTS ecommerce_pc
@@ -18,7 +18,7 @@ CREATE TABLE usuarios (
 
 
 INSERT INTO usuarios (nome, email, senha, tipo) VALUES
-('Administrador', 'admin@email.com', '$2b$10$HASH_AQUI', 'admin');
+('Administrador', 'admin@email.com', '$2b$10$vcShCSwNHImUdm0/x2xk3e9qBh1DYR4vY.MUvGoX92e6N/ZYnBBNe', 'admin');
 
 -- Tabela de clientes
 CREATE TABLE clientes (

@@ -6,6 +6,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const mysql = require('mysql2');
 
+
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use('/bootstrap-icons', express.static(__dirname + '/node_modules/bootstrap-icons/font'));
 app.use('/static', express.static(__dirname + '/static'));
@@ -24,6 +25,8 @@ app.use(session({
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.engine('handlebars', engine({
+  defaultLayout: 'main',
+  partialsDir: __dirname + '/views/partials',
   helpers: {
     ifCond: function (v1, operator, v2, options) {
       switch (operator) {
@@ -61,8 +64,74 @@ conexao.connect((erro) => {
   console.log('😁 Conexão com o banco de dados estabelecida com sucesso!');
 });
 
+// Adicionar antes das rotas
+ 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+ 
+// Torna `usuario` acessível nas views e partials
+app.use((req, res, next) => {
+  res.locals.usuario = req.session.usuario || null;
+  next();
+});
 
-app.get('/cadastrar', (req, res) => {
+app.get('/login', (req, res) => {
+  if (req.session.usuario) {
+    return res.redirect('/home');
+  }
+  res.render('login');
+});
+
+
+app.post('/login', (req, res) => {
+  const { email, senha } = req.body;
+
+  const sql = 'SELECT * FROM usuarios WHERE email = ?';
+  conexao.query(sql, [email], (erro, resultado) => {
+    if (erro || resultado.length === 0) {
+      return res.status(401).send('E-mail não encontrado.');
+    }
+
+    const usuario = resultado[0];
+
+    bcrypt.compare(senha, usuario.senha, (erroHash, senhaOk) => {
+      if (erroHash || !senhaOk) {
+        return res.status(401).send('Senha incorreta.');
+      }
+
+      req.session.usuario = {
+        id: usuario.id,
+        nome: usuario.nome,
+        tipo: usuario.tipo,
+        email: usuario.email
+      };
+
+      res.redirect('/home');
+    });
+  });
+});
+
+
+app.get('/home', (req, res) => {
+  if (!req.session.usuario) {
+    return res.redirect('/login');
+  }
+  res.render('home_user');
+});
+
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((erro) => {
+    if (erro) {
+      console.error('😫 Erro ao encerrar sessão:', erro);
+      return res.status(500).send('Erro ao encerrar sessão.');
+    }
+    res.redirect('/login');
+  });
+}); 
+
+
+app.get('/clientes/cadastrar', (req, res) => {
   res.render('usuarios_form');
 });
 
@@ -113,6 +182,9 @@ app.get('/', (req, res) => {;
 
 
 app.get('/produtos/add', (req, res) => {
+  if (!req.session.usuario || req.session.usuario.tipo !== 'admin') {
+    return res.status(403).send('Acesso negado. Somente administradores podem adicionar produtos.');
+  }
   let sql = 'SELECT id, nome FROM categorias';
   
   conexao.query(sql, function (erro, categorias_qs) {
@@ -128,6 +200,9 @@ app.get('/produtos/add', (req, res) => {
 
 
 app.post('/produtos/add', (req, res) => {
+  if (!req.session.usuario || req.session.usuario.tipo !== 'admin') {
+    return res.status(403).send('Acesso negado. Somente administradores podem adicionar produtos.');
+  }
   const { nome, descricao, preco, estoque, categoria_id } = req.body;
 
   const sql = `
@@ -171,6 +246,9 @@ app.get('/produtos/:id/detalhes', (req, res) => {
 
 
 app.post('/produtos/:id/remover', (req, res) => {
+  if (!req.session.usuario || req.session.usuario.tipo !== 'admin') {
+    return res.status(403).send('Acesso negado. Somente administradores podem remover produtos.');
+  }
   const id = req.params.id;
   const sql = 'DELETE FROM produtos WHERE id = ?';
 
@@ -185,6 +263,9 @@ app.post('/produtos/:id/remover', (req, res) => {
 
 
 app.get('/produtos/:id/editar', (req, res) => {
+  if (!req.session.usuario || req.session.usuario.tipo !== 'admin') {
+    return res.status(403).send('Acesso negado. Somente administradores podem adicionar produtos.');
+  }
   const id = req.params.id;
 
   const sqlProduto = `
@@ -218,6 +299,9 @@ app.get('/produtos/:id/editar', (req, res) => {
 
 
 app.post('/produtos/:id/editar', (req, res) => {
+  if (!req.session.usuario || req.session.usuario.tipo !== 'admin') {
+    return res.status(403).send('Acesso negado. Somente administradores podem adicionar produtos.');
+  }
   const id = req.params.id;
   const { nome, descricao, preco, estoque, categoria_id } = req.body;
 
